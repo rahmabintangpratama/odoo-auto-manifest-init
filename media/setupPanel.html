@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Odoo Module Setup</title>
+    <style>
+        body { font-family: sans-serif; margin: 18px; }
+        label { display:inline-block; width:140px }
+        input[type="text"] { width: 340px; }
+        .field-row { margin-bottom: 14px; }
+        .save-success { color: green; margin-top: 20px; }
+        button[type="button"] { margin-left: 6px; }
+    </style>
+</head>
+<body>
+    <h2>Odoo Module Setup</h2>
+    <form id="setupForm">
+        <div class="field-row">
+            <label>Enable Extension</label>
+            <input type="checkbox" id="enabled" />
+        </div>
+        <div class="field-row">
+            <label>Module Folder</label>
+            <input type="text" id="moduleFolder" readonly />
+            <button type="button" data-input="moduleFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Views Folder</label>
+            <input type="text" id="viewsFolder" readonly />
+            <button type="button" data-input="viewsFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Wizard Folder</label>
+            <input type="text" id="wizardFolder" readonly />
+            <button type="button" data-input="wizardFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Controllers Folder</label>
+            <input type="text" id="controllersFolder" readonly />
+            <button type="button" data-input="controllersFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Data Folder</label>
+            <input type="text" id="dataFolder" readonly />
+            <button type="button" data-input="dataFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Security Folder</label>
+            <input type="text" id="securityFolder" readonly />
+            <button type="button" data-input="securityFolder">Browse...</button>
+        </div>
+        <div class="field-row">
+            <label>Models Folder</label>
+            <input type="text" id="modelsFolder" readonly />
+            <button type="button" data-input="modelsFolder">Browse...</button>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+    <div class="save-success" id="saveSuccess" style="display:none;">Config saved successfully!</div>
+    <script>
+        /*__PREFILL__*/
+        window.vscode = acquireVsCodeApi();
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.prefillConfig) {
+                let c = window.prefillConfig;
+                if (typeof c.enabled === 'boolean') document.getElementById('enabled').checked = c.enabled;
+                if (c.moduleFolder) document.getElementById('moduleFolder').value = c.moduleFolder;
+                if (c.viewsPath) document.getElementById('viewsFolder').value = c.viewsPath;
+                if (c.wizardPath) document.getElementById('wizardFolder').value = c.wizardPath;
+                if (c.controllersPath) document.getElementById('controllersFolder').value = c.controllersPath;
+                if (c.dataPath) document.getElementById('dataFolder').value = c.dataPath;
+                if (c.securityPath) document.getElementById('securityFolder').value = c.securityPath;
+                if (c.modelsPath) document.getElementById('modelsFolder').value = c.modelsPath;
+            }
+        });
+        [...document.querySelectorAll('button[data-input]')].forEach(btn => {
+            btn.addEventListener('click', () => {
+                const inputId = btn.getAttribute('data-input');
+                window.vscode.postMessage({ command: 'pickFolder', inputId });
+            });
+        });
+        document.getElementById('setupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const config = {
+                enabled: document.getElementById('enabled').checked,
+                moduleFolder: document.getElementById('moduleFolder').value,
+                viewsPath: document.getElementById('viewsFolder').value,
+                wizardPath: document.getElementById('wizardFolder').value,
+                controllersPath: document.getElementById('controllersFolder').value,
+                dataPath: document.getElementById('dataFolder').value,
+                securityPath: document.getElementById('securityFolder').value,
+                modelsPath: document.getElementById('modelsFolder').value,
+            };
+            window.vscode.postMessage({ command: 'saveConfig', config });
+        });
+        window.addEventListener('message', event => {
+            const message = event.data;
+            if (message.command === 'folderPicked') {
+                document.getElementById(message.inputId).value = message.folderPath;
+            } else if (message.command === 'saveSuccess') {
+                document.getElementById('saveSuccess').style.display = '';
+                setTimeout(() => {
+                    document.getElementById('saveSuccess').style.display = 'none';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
