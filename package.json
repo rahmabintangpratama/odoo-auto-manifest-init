@@ -9,6 +9,13 @@
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rahmabintangpratama/odoo-auto-manifest-init"
+  },
+  "author": {
+    "name": "Rahma Bintang Pratama"
+  },
   "activationEvents": [
     "onStartupFinished",
     "onCommand:odoo-auto-manifest-init.showSetupPanel"
