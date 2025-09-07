@@ -1,8 +1,8 @@
 {
   "name": "odoo-auto-manifest-init",
   "displayName": "Odoo Auto Manifest & Init Helper",
-  "description": "Automatically manages Odoo module's __manifest__.py and __init__.py. Adds or comments out XML (views, wizard, data, security) and Python files (models, wizard) on file changes for rapid Odoo development.",
-  "version": "1.0.0",
+  "description": "Automatically manages Odoo module's __manifest__.py and __init__.py. Adds or comments out XML (views, wizard, data, security) and Python files (models, wizard, controllers) on file changes for rapid Odoo development.",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.103.0"
   },
