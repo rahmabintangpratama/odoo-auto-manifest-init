@@ -16,6 +16,8 @@
   "author": {
     "name": "Rahma Bintang Pratama"
   },
+  "publisher": "rahmabintangpratama",
+  "icon": "icon.png",
   "activationEvents": [
     "onStartupFinished",
     "onCommand:odoo-auto-manifest-init.showSetupPanel"
